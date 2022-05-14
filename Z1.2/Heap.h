@@ -39,4 +39,7 @@ class Heap
 
 		void loadFromFile(string FileName);
 		void generateHeap(int size);
+
+		bool isEmpty();
+		int getLength();
 };

@@ -1,6 +1,7 @@
 #include "Graf.h"
 #include <iostream>
 #include <fstream>
+#include "Heap.h"
 
 Graf::Graf()
 {
@@ -12,6 +13,26 @@ Graf::~Graf()
 
 void Graf::dijkstra()
 {
+	int* d = new int[V];
+	int* p = new int[V];
+
+	for (int i = 0; i < V; i++)
+	{
+		d[i] = INT_MAX;
+		p[i] = NULL;
+	}
+
+	d[arg] = 0;//wierzcholek startowy
+	Heap Q(V);
+
+	for (int i = 0; i < V; i++)
+	{
+		Q.insert(i);
+	}
+	while (Q.getLength() != 0) //trzeba zamienic kopiec na minimalny
+	{
+
+	}
 }
 
 void Graf::bellmanFord()
@@ -62,7 +83,7 @@ void Graf::generateGraf()
 
 	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 
-
+	int cost, V1, V2;
 }
 
 void Graf::display()
@@ -71,7 +92,7 @@ void Graf::display()
 	{
 		for (int j = 0; j < V; j++)
 		{
-			cout << macierzWag[i][j];
+			cout << macierzWag[i][j]; cout << " ";
 		}
 		cout << endl;
 	}

@@ -392,10 +392,11 @@ int main(int argc, char* argv[])
 {
 	srand(time(NULL));
 
-	menuZ2();
-	/*Graf graf;
+	//menuZ2();
+	Graf graf;
 
-	graf.loadFromFile("dane_droga_sk1.txt");*/
+	graf.loadFromFile("dane_droga_sk1.txt");
+	graf.display();
 
 	return 0;
 }

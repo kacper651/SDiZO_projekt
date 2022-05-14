@@ -153,6 +153,7 @@ void Heap::deleteElement(int index)
 	swapElements(index, len-1);
 	len--;
 	maxHeapifyDown(index);
+	maxHeapifyUp(index);
 }
 
 void Heap::destroyHeap()
@@ -186,6 +187,16 @@ void Heap::generateHeap(int size)
 	{
 		insert(rand() % 100);
 	}
+}
+
+bool Heap::isEmpty()
+{
+	return false;
+}
+
+int Heap::getLength()
+{
+	return this->len;
 }
 
 bool Heap::isValueInHeap(int value)
