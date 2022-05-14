@@ -260,31 +260,105 @@ void menuZ1()
 	} while (option != '0');
 }
 
-//void menuShortestPath()
-//{
-//	char opt;
-//
-//	do
-//	{
-//		cout << endl;
-//		cout << "==== NAJKROTSZA SCIEZKA ====" << endl;
-//
-//
-//	} while (opt != '0');
-//}
+void menuShortestPath()
+{
+	char opt;
+	Graf myGraf;
+	string filename;
 
-//void menuMST()
-//{
-//	char opt;
-//
-//	do
-//	{
-//		cout << endl;
-//		cout << "==== MST ====" << endl;
-//
-//
-//	} while (opt != '0');
-//}
+	do
+	{
+		cout << endl;
+		cout << "==== NAJKROTSZA SCIEZKA ====" << endl;
+		cout << "1. Wczytaj z pliku" << endl;
+		cout << "2. Wygeneruj graf losowo" << endl;
+		cout << "3. Wyswietl listowo i macierzowo" << endl;
+		cout << "4. Algorytm Dijkstry" << endl;
+		cout << "5. Algorytm Bellmana-Forda" << endl;
+		cout << "0. Wyjscie" << endl;
+
+		opt = _getche();
+
+		switch (opt)
+		{
+		case '1':
+			cout << "Podaj nazwe pliku: ";
+			cin >> filename;
+			myGraf.loadFromFile(filename);
+			myGraf.display();
+			break;
+
+		case '2':
+			myGraf.generateGraf();
+			myGraf.display();
+			break;
+
+		case '3':
+			myGraf.display();
+			break;
+
+		case '4':
+			myGraf.display();
+			myGraf.dijkstra();
+			break;
+
+		case '5':
+			myGraf.display();
+			myGraf.bellmanFord();
+			break;
+		}
+
+	} while (opt != '0');
+}
+
+void menuMST()
+{
+	char opt;
+	Graf myGraf;
+	string filename;
+
+	do
+	{
+		cout << endl;
+		cout << "==== MST ====" << endl;
+		cout << "1. Wczytaj z pliku" << endl;
+		cout << "2. Wygeneruj graf losowo" << endl;
+		cout << "3. Wyswietl listowo i macierzowo" << endl;
+		cout << "4. Algorytm Prima" << endl;
+		cout << "5. Algorytm Kruskala" << endl;
+		cout << "0. Wyjscie" << endl;
+
+		opt = _getche();
+
+		switch (opt)
+		{
+		case '1':
+			myGraf.loadFromFile(filename);
+			myGraf.display();
+			break;
+
+		case '2':
+			myGraf.generateGraf();
+			myGraf.display();
+			break;
+
+		case '3':
+			myGraf.display();
+			break;
+
+		case '4':
+			myGraf.display();
+			myGraf.prim();
+			break;
+
+		case '5':
+			myGraf.display();
+			myGraf.kruskal();
+			break;
+		}
+
+	} while (opt != '0');
+}
 
 void menuZ2()
 {
@@ -303,11 +377,11 @@ void menuZ2()
 
 		switch (option) {
 		case '1':
-			//menuShortestPath();
+			menuShortestPath();
 			break;
 
 		case '2':
-			//menuMST();
+			menuMST();
 			break;
 		}
 
@@ -318,10 +392,10 @@ int main(int argc, char* argv[])
 {
 	srand(time(NULL));
 
-	//menuZ2();
-	Graf graf;
+	menuZ2();
+	/*Graf graf;
 
-	graf.loadFromFile("dane_droga_sk1.txt");
+	graf.loadFromFile("dane_droga_sk1.txt");*/
 
 	return 0;
 }

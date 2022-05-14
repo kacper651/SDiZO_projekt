@@ -28,16 +28,6 @@ void Graf::kruskal()
 
 void Graf::loadFromFile(string Filename)
 {
-	if (macierzWag != nullptr)
-	{
-		for (int i = 0; i < V; i++)
-		{
-			delete[] macierzWag[i];
-		}
-		delete macierzWag;
-		macierzWag = nullptr;
-	}
-
 	ifstream Plik(Filename);
 
 	if (!Plik.good())
@@ -48,15 +38,8 @@ void Graf::loadFromFile(string Filename)
 	
 	Plik >> E; Plik >> V; Plik >> arg;
 
-	macierzWag = new int* [V];
-	for (int i = 0; i < V; i++)
-	{
-		macierzWag[i] = new int[V];
-		for (int j = 0; j < V; j++)
-		{
-			macierzWag[i][j] = 0;
-		}
-	}
+	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
+
 	int start, end, cost;
 
 	while (!Plik.eof())
@@ -65,8 +48,26 @@ void Graf::loadFromFile(string Filename)
 		macierzWag[start][end] = cost;
 		macierzWag[end][start] = cost;
 	}
+}
 
-	for (int i = 0; i < V; i++)
+void Graf::generateGraf()
+{
+	cout << "Podaj ilosc wierzcholkow grafu: ";
+	cin >> V;
+	cout << "Podaj gestosc zapelnienia grafu w %: ";
+	float density;
+	cin >> density;
+	density /= 100;
+	E = density * V * (V - 1) / 2;
+
+	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
+
+
+}
+
+void Graf::display()
+{
+	for (int i = 0; i < V; i++) //reprezentacja macierzowa
 	{
 		for (int j = 0; j < V; j++)
 		{
@@ -76,12 +77,25 @@ void Graf::loadFromFile(string Filename)
 	}
 }
 
-void Graf::generateGraf(int V, float gestosc)
+void Graf::init()
 {
+	if (macierzWag != nullptr) //uswanie istniejacej macierzy
+	{
+		for (int i = 0; i < V; i++)
+		{
+			delete[] macierzWag[i];
+		}
+		delete macierzWag;
+		macierzWag = nullptr;
+	}
 
-}
-
-void Graf::display()
-{
-
+	macierzWag = new int* [V];
+	for (int i = 0; i < V; i++)
+	{
+		macierzWag[i] = new int[V];
+		for (int j = 0; j < V; j++) //wypelnienie zerami
+		{
+			macierzWag[i][j] = 0;
+		}
+	}
 }

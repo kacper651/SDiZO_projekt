@@ -25,7 +25,9 @@ public:
 	void kruskal();
 
 	void loadFromFile(string Filename);
-	void generateGraf(int V, float gestosc);
+	void generateGraf();
 
 	void display();
+
+	void init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 };
