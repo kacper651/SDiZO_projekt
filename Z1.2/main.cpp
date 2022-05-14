@@ -179,7 +179,7 @@ void menu_heap()
 		case '1': //tutaj wczytytwanie kopca z pliku
 			cout << " Podaj nazwe zbioru:";
 			cin >> fileName;
-			myHeap.loadFromFile(fileName);
+			//myHeap.loadFromFile(fileName);
 			myHeap.display();
 			break;
 
@@ -193,7 +193,7 @@ void menu_heap()
 		case '3': //tutaj dodawanie elemetu do kopca
 			cout << "Jaka wartosc chcesz dodac?";
 			cin >> value;
-			myHeap.insert(value);
+			//myHeap.insert(value);
 			myHeap.display();
 			break;
 
@@ -209,7 +209,7 @@ void menu_heap()
 		case '5':  //tutaj generowanie kopca
 			cout << "Podaj ilosc elementow listy, ktora chcesz wygenerowac:";
 			cin >> size;
-			myHeap.generateHeap(size);
+			//myHeap.generateHeap(size);
 			myHeap.display();
 			break;
 
@@ -395,8 +395,9 @@ int main(int argc, char* argv[])
 	//menuZ2();
 	Graf graf;
 
-	graf.loadFromFile("dane_droga_sk1.txt");
-	graf.display();
+	graf.loadFromFile("dane_droga_sk2.txt");
+	//graf.display();
+	graf.dijkstra();
 
 	return 0;
 }

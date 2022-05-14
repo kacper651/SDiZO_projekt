@@ -238,11 +238,11 @@ void tabTest(int tabSize)
 float heapTestAdd(int heapSize)
 {
 	Heap testHeap(heapSize);
-	testHeap.generateHeap(heapSize);
+	//testHeap.generateHeap(heapSize);
 
 	StartCounter();
 
-	testHeap.insert(rand() % 100);
+	//testHeap.insert(rand() % 100);
 
 	return GetCounter();
 }
@@ -250,7 +250,7 @@ float heapTestAdd(int heapSize)
 float heapTestDelete(int heapSize)
 {
 	Heap testHeap(heapSize);
-	testHeap.generateHeap(heapSize);
+	//testHeap.generateHeap(heapSize);
 
 	StartCounter();
 
@@ -262,7 +262,7 @@ float heapTestDelete(int heapSize)
 float heapTestSearch(int heapSize)
 {
 	Heap testHeap(heapSize);
-	testHeap.generateHeap(heapSize);
+	//testHeap.generateHeap(heapSize);
 
 	StartCounter();
 

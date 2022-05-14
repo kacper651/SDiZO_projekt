@@ -19,7 +19,7 @@ void Graf::dijkstra()
 	for (int i = 0; i < V; i++)
 	{
 		d[i] = INT_MAX;
-		p[i] = NULL;
+		p[i] = -1;
 	}
 
 	d[arg] = 0;//wierzcholek startowy
@@ -27,11 +27,46 @@ void Graf::dijkstra()
 
 	for (int i = 0; i < V; i++)
 	{
-		Q.insert(i);
+		Q.insert(d[i]);
 	}
-	while (Q.getLength() != 0) //trzeba zamienic kopiec na minimalny
-	{
+	Q.display();
 
+	int u;
+
+	while (Q.getLength() != 0)
+	{
+		for (u = 0; u < V; u++)
+		{
+			if (d[u] == Q.getTop())
+				break;
+		}
+
+		for (int i = 0; i < V; i++)
+		{
+			if (macierzWag[i][u] != 0)
+			{
+				if (d[i] > d[u] + macierzWag[i][u]) //relaksacja
+				{
+					d[i] = d[u] + macierzWag[i][u]; //korekta Q
+					Q.setElement(i, d[i]);					
+					p[i] = u;
+				}
+			}
+		}
+		Q.deleteElement(0);
+		Q.display();
+	}
+
+	for (int i = 0; i < V; i++)
+	{
+		cout << d[i] << " ";
+	}
+
+	cout << endl;
+
+	for (int i = 0; i < V; i++)
+	{
+		cout << p[i] << " ";
 	}
 }
 

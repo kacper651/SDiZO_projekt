@@ -16,7 +16,7 @@ void Heap::insert(int value)
 	}
 
 	arr[len] = value; //przypisanie nowej wartości na koniec tablicy
-	maxHeapifyUp(len); //uporządkowanie (przwrócenie własności) kopca
+	minHeapifyUp(len); //uporządkowanie (przwrócenie własności) kopca
 	len++; //zwiększenie licznika elementów
 }
 
@@ -46,11 +46,11 @@ void Heap::swapElements(int index1, int index2)
 	arr[index2] = tmp;
 }
 
-void Heap::maxHeapifyUp(int index)
+void Heap::minHeapifyUp(int index)
 {
 	int parentIndex = getParent(index);
 
-	while(isValidIndex(parentIndex) && arr[index] > arr[parentIndex])
+	while(isValidIndex(parentIndex) && arr[index] < arr[parentIndex])
 	{
 		swapElements(index, parentIndex);
 		index = parentIndex;
@@ -58,27 +58,27 @@ void Heap::maxHeapifyUp(int index)
 	}
 }
 
-void Heap::maxHeapifyDown(int parentIndex)
+void Heap::minHeapifyDown(int parentIndex)
 {
 	int leftChildIndex = getLeftChild(parentIndex);
 	int rightChildIndex;
-	int biggerValueIndex;
+	int smallerValueIndex;
 
 	while(isValidIndex(leftChildIndex))
 	{
-		biggerValueIndex = leftChildIndex;
+		smallerValueIndex = leftChildIndex;
 
 		rightChildIndex = getRightChild(parentIndex);
 
 		if (isValidIndex(rightChildIndex) && arr[rightChildIndex] > arr[leftChildIndex])
 		{
-			biggerValueIndex = rightChildIndex;
+			smallerValueIndex = rightChildIndex;
 		}
 
-		if (arr[biggerValueIndex] > arr[parentIndex])
+		if (arr[smallerValueIndex] < arr[parentIndex])
 		{
-			swapElements(biggerValueIndex, parentIndex);
-			parentIndex = biggerValueIndex;
+			swapElements(smallerValueIndex, parentIndex);
+			parentIndex = smallerValueIndex;
 			leftChildIndex = getLeftChild(parentIndex);
 		}
 		else
@@ -123,28 +123,28 @@ void Heap::display()
 	cout<<endl;
 }
 
-void Heap::loadFromFile(string FileName)
-{
-	destroyHeap();
-
-	ifstream Plik(FileName);
-	int cnt_size, tmp;
-
-	if (!Plik.good())
-	{
-		cout << "nie ma pliku\n";
-		return;
-	}
-
-	Plik >> cnt_size;
-	init(cnt_size + 10);
-
-	for (int i = 0; i < cnt_size; i++)
-	{
-		Plik >> tmp;
-		this->insert(tmp);
-	}
-}
+//void Heap::loadFromFile(string FileName)
+//{
+//	destroyHeap();
+//
+//	ifstream Plik(FileName);
+//	int cnt_size, tmp;
+//
+//	if (!Plik.good())
+//	{
+//		cout << "nie ma pliku\n";
+//		return;
+//	}
+//
+//	Plik >> cnt_size;
+//	init(cnt_size + 10);
+//
+//	for (int i = 0; i < cnt_size; i++)
+//	{
+//		Plik >> tmp;
+//		this->insert(tmp);
+//	}
+//}
 
 void Heap::deleteElement(int index)
 {
@@ -152,8 +152,8 @@ void Heap::deleteElement(int index)
 		return;
 	swapElements(index, len-1);
 	len--;
-	maxHeapifyDown(index);
-	maxHeapifyUp(index);
+	minHeapifyDown(index);
+	minHeapifyUp(index);
 }
 
 void Heap::destroyHeap()
@@ -178,16 +178,16 @@ Heap::~Heap()
 	destroyHeap();
 }
 
-void Heap::generateHeap(int size)
-{
-	destroyHeap();
-	init(size);
-
-	for (int i=0; size>i; i++)
-	{
-		insert(rand() % 100);
-	}
-}
+//void Heap::generateHeap(int size)
+//{
+//	destroyHeap();
+//	init(size);
+//
+//	for (int i=0; size>i; i++)
+//	{
+//		insert(rand() % 100);
+//	}
+//}
 
 bool Heap::isEmpty()
 {
@@ -197,6 +197,30 @@ bool Heap::isEmpty()
 int Heap::getLength()
 {
 	return this->len;
+}
+
+int Heap::getTop()
+{
+	return arr[0];
+}
+
+void Heap::clear()
+{
+	this->len = 0;
+}
+
+int Heap::getElement(int index)
+{
+	if(isValidIndex(index))
+		return this->arr[index];
+	
+	return -1;
+}
+
+void Heap::setElement(int index, int newValue)
+{
+	if (isValidIndex(index))
+		arr[index] = newValue;
 }
 
 bool Heap::isValueInHeap(int value)

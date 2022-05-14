@@ -21,8 +21,8 @@ class Heap
 		void resize(int newSize);
 		void swapElements(int index1, int index2);
 
-		void maxHeapifyUp(int index);
-		void maxHeapifyDown(int parentIndex);
+		void minHeapifyUp(int index);
+		void minHeapifyDown(int parentIndex);
 
 		void init(int size);
 		void destroyHeap();
@@ -42,4 +42,10 @@ class Heap
 
 		bool isEmpty();
 		int getLength();
+		int getTop();
+
+		void clear();
+
+		int getElement(int index);
+		void setElement(int index, int newValue);
 };
