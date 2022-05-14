@@ -70,7 +70,7 @@ void Heap::minHeapifyDown(int parentIndex)
 
 		rightChildIndex = getRightChild(parentIndex);
 
-		if (isValidIndex(rightChildIndex) && arr[rightChildIndex] > arr[leftChildIndex])
+		if (isValidIndex(rightChildIndex) && arr[rightChildIndex] < arr[leftChildIndex])
 		{
 			smallerValueIndex = rightChildIndex;
 		}
