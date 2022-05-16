@@ -13,125 +13,156 @@ Graf::~Graf()
 
 void Graf::dijkstra()
 {
-	int* d = new int[V];
-	int* p = new int[V];
-
-	for (int i = 0; i < V; i++)
+	if (macierzWag != nullptr)
 	{
-		d[i] = INT_MAX;
-		p[i] = -1;
-	}
+		int* d = new int[V]; //inicjalizacja tablic wynikowych algorytmu
+		int* p = new int[V];
 
-	d[arg] = 0;//wierzcholek startowy
-	Heap Q(V);
-
-	for (int i = 0; i < V; i++)
-	{
-		Q.insert(&d[i]);
-	}
-
-	int u;
-
-	while (Q.getLength() != 0)
-	{
-		for (u = 0; u < V; u++)
+		for (int i = 0; i < V; i++) //wypelnienie tablic poczatkowymi wartosciami
 		{
-			if (&d[u] == Q.getTop())
-				break;
+			d[i] = INT_MAX;
+			p[i] = -1;
 		}
+
+		d[arg] = 0;//wierzcholek startowy
+		Heap Q(V); //kolejka priorytetowa w postaci kopca minimalnego
 
 		for (int i = 0; i < V; i++)
 		{
-			if (macierzWag[i][u] != 0)
+			Q.insert(&d[i]);
+		}
+
+		int u;
+
+		while (Q.getLength() != 0)
+		{
+			for (u = 0; u < V; u++)
 			{
-				if (d[u] != INT_MAX && d[i] > d[u] + macierzWag[i][u]) //relaksacja
+				if (&d[u] == Q.getTop())
 				{
-					d[i] = d[u] + macierzWag[i][u]; //korekta Q
-					p[i] = u;
+					break;
 				}
 			}
+
+			for (int i = 0; i < V; i++)
+			{
+					if (macierzWag[i][u] != 0 && d[u] != INT_MAX && d[i] > d[u] + macierzWag[i][u]) //relaksacja
+					{
+						d[i] = d[u] + macierzWag[i][u];
+						p[i] = u;
+					}
+			}
+			Q.deleteElement(0);
 		}
-		Q.deleteElement(0);
+
+		//Wyniki algorytmu
+		cout << "Tablica d[i]: " << endl;
+		cout << "Indeks: ";
+		for (int i = 0; i < V; i++)
+			cout << i << " ";
+		cout << endl;
+		cout << "Dystans:";
+
+		for (int i = 0; i < V; i++)
+		{
+			cout << d[i] << " ";
+		}
+
+		cout << endl << "Tablica p[i]: " << endl;
+		cout << "Indeks: ";
+		for (int i = 0; i < V; i++)
+			cout << i << " ";
+		cout << endl;
+		cout << "Rodzic: ";
+
+		for (int i = 0; i < V; i++)
+		{
+			cout << p[i] << " ";
+		}
+
+		cout << endl;
+		delete[] p;
+		delete[] d;
 	}
-
-	cout << "Tablica d[i]: " << endl;
-
-	for (int i = 0; i < V; i++)
-	{
-		cout << d[i] << " ";
-	}
-
-	cout << endl << "Tablica p[i]: " << endl;
-
-	for (int i = 0; i < V; i++)
-	{
-		cout << p[i] << " ";
-	}
-
-	cout << endl;
-	delete[] p;
-	delete[] d;
+	else
+		cout << "Przed proba wykonania algorytmu wczytaj graf!" << endl;
 }
 
 void Graf::bellmanFord()
 {
-	int* d = new int[V];
-	int* p = new int[V];
-
-	for (int i = 0; i < V; i++)
+	if (macierzWag != nullptr)
 	{
-		d[i] = INT_MAX;
-		p[i] = -1;
-	}
+		int* d = new int[V]; //inicjalizacja tablic wynikowych algorytmu
+		int* p = new int[V];
 
-	bool updated; //flaga sprawdzajaca czy nastapila relaksacja
-
-	d[arg] = 0;//wierzcholek startowy
-
-	for (int i=0; i < V - 1; i++) //iteracja po wszystkich mozliwych sasiadach
-	{
-		updated = false;
-
-		for (int j = 0; j < E; j++)
+		for (int i = 0; i < V; i++) //wypelnienie tablic poczatkowymi wartosciami
 		{
-			if (d[krawedzie[j].src] != INT_MAX && d[krawedzie[j].src] + krawedzie[j].cst < d[krawedzie[j].dst]) //relaksacja
+			d[i] = INT_MAX;
+			p[i] = -1;
+		}
+
+		bool updated; //flaga sprawdzajaca czy nastapila relaksacja
+
+		d[arg] = 0;//wierzcholek startowy
+
+		for (int i = 0; i < V - 1; i++) //iteracja po wszystkich mozliwych sasiadach
+		{
+			updated = false;
+
+			for (int j = 0; j < E; j++) //E = liczba krawedzi
 			{
-				d[krawedzie[j].dst] = d[krawedzie[j].src] + krawedzie[j].cst;
-				p[krawedzie[j].dst] = krawedzie[j].src;
-				updated = true;
+				if (d[krawedzie[j].src] != INT_MAX && d[krawedzie[j].src] + krawedzie[j].cst < d[krawedzie[j].dst]) //relaksacja
+				{
+					d[krawedzie[j].dst] = d[krawedzie[j].src] + krawedzie[j].cst;
+					p[krawedzie[j].dst] = krawedzie[j].src;
+					updated = true;
+				}
+			}
+
+			if (updated == false) //sprawdzenie czy jest sens dalej iterowac
+				break;
+		}
+
+		for (int i = 0; i < E && updated; i++) //petla sprawdzajaca czy wystepuje ujemny cykl w grafie
+		{
+			if (d[krawedzie[i].src] != INT_MAX && d[krawedzie[i].src] + krawedzie[i].cst < d[krawedzie[i].dst])
+			{
+				cout << "Ujemny cykl!" << endl;
+				return;
 			}
 		}
 
-		if (updated == false) //sprawdzenie czy jest sens dalej iterowac
-			break;
-	}
+		//Wyniki algorytmu
+		cout << "Tablica d[i]: " << endl;
+		cout << "Indeks: ";
+		for (int i = 0; i < V; i++)
+			cout << i << " ";
+		cout << endl;
+		cout << "Dystans:";
 
-	for (int i=0; i < E && updated; i++) //petla sprawdzajaca czy wystepuje ujemny cykl w grafie
-	{
-		if (d[krawedzie[i].src] != INT_MAX && d[krawedzie[i].src] + krawedzie[i].cst < d[krawedzie[i].dst])
+		for (int i = 0; i < V; i++) //wypisywanie d[i]
 		{
-			cout<<"Ujemny cykl!"<<endl;
-			return;
+			cout << d[i] << " ";
 		}
+
+		cout << endl << "Tablica p[i]: " << endl;
+		cout << "Indeks: ";
+		for (int i = 0; i < V; i++)
+			cout << i << " ";
+		cout << endl;
+		cout << "Rodzic: ";
+
+		for (int i = 0; i < V; i++) //wypisywanie p[i]
+		{
+			cout << p[i] << " ";
+		}
+
+		cout << endl;
+		delete[] p;
+		delete[] d;
 	}
-
-	cout << "Tablica d[i]: " << endl;
-
-	for (int i = 0; i < V; i++) //wypisywanie d[i]
-	{
-		cout << d[i] << " ";
-	}
-
-	cout << endl << "Tablica p[i]: " << endl;
-
-	for (int i = 0; i < V; i++) //wypisywanie p[i]
-	{
-		cout << p[i] << " ";
-	}
-
-	cout << endl;
-	delete[] p;
-	delete[] d;
+	else
+		cout << "Przed proba wykonania algorytmu wczytaj graf!" << endl;
 }
 
 void Graf::prim()
@@ -148,7 +179,7 @@ void Graf::loadFromFile(string Filename)
 
 	if (!Plik.good())
 	{
-		cout << "nie znaleziono pliku\n";
+		cout << "Nie znaleziono pliku\n";
 		return;
 	}
 	
@@ -182,7 +213,7 @@ void Graf::generateGraf()
 	float density;
 	cin >> density;
 	density /= 100;
-	E = density * V * (V - 1) / 2;
+	E = density * V * (V - 1) / 2; //ilosc wierzcholkow ze wzoru w oparciu na gestosc grafu
 
 	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 
@@ -191,23 +222,28 @@ void Graf::generateGraf()
 
 void Graf::display()
 {
-	cout<<"Macierz wag:"<<endl;
-
-	for (int i = 0; i < V; i++) //reprezentacja macierzowa
+	if (macierzWag != nullptr)
 	{
-		for (int j = 0; j < V; j++)
+		cout << "Macierz wag:" << endl;
+
+		for (int i = 0; i < V; i++) //reprezentacja macierzowa
 		{
-			cout << macierzWag[i][j]; cout << " ";
+			for (int j = 0; j < V; j++)
+			{
+				cout << macierzWag[i][j]; cout << " ";
+			}
+			cout << endl;
 		}
-		cout << endl;
-	}
 
-	cout<<"Krawedzie:"<<endl;
+		cout << "Krawedzie:" << endl;
 
-	for (int i=0; i < E; i++)
-	{
-		cout<<krawedzie[i].src<<" -> "<<krawedzie[i].dst<<" = "<<krawedzie[i].cst<<endl;
+		for (int i = 0; i < E; i++)
+		{
+			cout << krawedzie[i].src << " -> " << krawedzie[i].dst << " = " << krawedzie[i].cst << endl;
+		}
 	}
+	else
+		cout << "Nie mozna wyswietlic reprezentacji, wczytaj graf!" << endl;
 }
 
 void Graf::init()

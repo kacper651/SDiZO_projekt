@@ -189,11 +189,6 @@ Heap::~Heap()
 //	}
 //}
 
-//bool Heap::isEmpty()
-//{
-//	return false;
-//}
-
 int Heap::getLength()
 {
 	return this->len;

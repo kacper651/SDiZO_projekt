@@ -278,6 +278,7 @@ void menuShortestPath()
 		cout << "0. Wyjscie" << endl;
 
 		opt = _getche();
+		cout << endl;
 
 		switch (opt)
 		{
@@ -329,6 +330,7 @@ void menuMST()
 		cout << "0. Wyjscie" << endl;
 
 		opt = _getche();
+		cout << endl;
 
 		switch (opt)
 		{
@@ -390,7 +392,14 @@ void menuZ2()
 
 int main(int argc, char* argv[])
 {
-	menuZ2();
+	//menuZ2();
+	Graf graf;
+
+	graf.loadFromFile("dane_droga_sk_BF.txt");
+	graf.display();
+	graf.dijkstra();
+	cout << endl;
+	graf.bellmanFord();
 
 	return 0;
 }
