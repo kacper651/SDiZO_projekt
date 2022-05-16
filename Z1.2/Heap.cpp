@@ -152,8 +152,8 @@ void Heap::deleteElement(int index)
 		return;
 	swapElements(index, len-1);
 	len--;
-	minHeapifyDown(index);
-	minHeapifyUp(index);
+	minHeapifyDown(len-1);
+	minHeapifyUp(len-1);
 }
 
 void Heap::destroyHeap()

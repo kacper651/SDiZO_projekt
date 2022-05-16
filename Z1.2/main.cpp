@@ -392,14 +392,14 @@ void menuZ2()
 
 int main(int argc, char* argv[])
 {
-	//menuZ2();
-	Graf graf;
+	menuZ2();
+	//Graf graf;
 
-	graf.loadFromFile("dane_droga_sk_BF.txt");
+	/*graf.loadFromFile("dane_droga_sk1.txt");
 	graf.display();
 	graf.dijkstra();
 	cout << endl;
-	graf.bellmanFord();
+	graf.bellmanFord();*/
 
 	return 0;
 }
