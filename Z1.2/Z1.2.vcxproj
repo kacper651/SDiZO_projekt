@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Edge.h" />
     <ClInclude Include="ElemList.h" />
     <ClInclude Include="Graf.h" />
     <ClInclude Include="Heap.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="Tests.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Edge.cpp" />
     <ClCompile Include="ElemList.cpp" />
     <ClCompile Include="Graf.cpp" />
     <ClCompile Include="Heap.cpp" />

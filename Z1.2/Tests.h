@@ -258,18 +258,18 @@ float heapTestDelete(int heapSize)
 
 	return GetCounter();
 }
-
-float heapTestSearch(int heapSize)
-{
-	Heap testHeap(heapSize);
-	//testHeap.generateHeap(heapSize);
-
-	StartCounter();
-
-	testHeap.isValueInHeap(rand() % 100);
-
-	return GetCounter();
-}
+//
+//float heapTestSearch(int heapSize)
+//{
+//	Heap testHeap(heapSize);
+//	//testHeap.generateHeap(heapSize);
+//
+//	StartCounter();
+//
+//	testHeap.isValueInHeap(rand() % 100);
+//
+//	return GetCounter();
+//}
 
 void heapTest(int heapSize)
 {

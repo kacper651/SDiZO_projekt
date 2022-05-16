@@ -27,9 +27,8 @@ void Graf::dijkstra()
 
 	for (int i = 0; i < V; i++)
 	{
-		Q.insert(d[i]);
+		Q.insert(&d[i]);
 	}
-	Q.display();
 
 	int u;
 
@@ -37,7 +36,7 @@ void Graf::dijkstra()
 	{
 		for (u = 0; u < V; u++)
 		{
-			if (d[u] == Q.getTop())
+			if (&d[u] == Q.getTop())
 				break;
 		}
 
@@ -45,33 +44,94 @@ void Graf::dijkstra()
 		{
 			if (macierzWag[i][u] != 0)
 			{
-				if (d[i] > d[u] + macierzWag[i][u]) //relaksacja
+				if (d[u] != INT_MAX && d[i] > d[u] + macierzWag[i][u]) //relaksacja
 				{
 					d[i] = d[u] + macierzWag[i][u]; //korekta Q
-					Q.setElement(i, d[i]);					
 					p[i] = u;
 				}
 			}
 		}
 		Q.deleteElement(0);
-		Q.display();
 	}
+
+	cout << "Tablica d[i]: " << endl;
 
 	for (int i = 0; i < V; i++)
 	{
 		cout << d[i] << " ";
 	}
 
-	cout << endl;
+	cout << endl << "Tablica p[i]: " << endl;
 
 	for (int i = 0; i < V; i++)
 	{
 		cout << p[i] << " ";
 	}
+
+	cout << endl;
+	delete[] p;
+	delete[] d;
 }
 
 void Graf::bellmanFord()
 {
+	int* d = new int[V];
+	int* p = new int[V];
+
+	for (int i = 0; i < V; i++)
+	{
+		d[i] = INT_MAX;
+		p[i] = -1;
+	}
+
+	bool updated; //flaga sprawdzajaca czy nastapila relaksacja
+
+	d[arg] = 0;//wierzcholek startowy
+
+	for (int i=0; i < V - 1; i++) //iteracja po wszystkich mozliwych sasiadach
+	{
+		updated = false;
+
+		for (int j = 0; j < E; j++)
+		{
+			if (d[krawedzie[j].src] != INT_MAX && d[krawedzie[j].src] + krawedzie[j].cst < d[krawedzie[j].dst]) //relaksacja
+			{
+				d[krawedzie[j].dst] = d[krawedzie[j].src] + krawedzie[j].cst;
+				p[krawedzie[j].dst] = krawedzie[j].src;
+				updated = true;
+			}
+		}
+
+		if (updated == false) //sprawdzenie czy jest sens dalej iterowac
+			break;
+	}
+
+	for (int i=0; i < E && updated; i++) //petla sprawdzajaca czy wystepuje ujemny cykl w grafie
+	{
+		if (d[krawedzie[i].src] != INT_MAX && d[krawedzie[i].src] + krawedzie[i].cst < d[krawedzie[i].dst])
+		{
+			cout<<"Ujemny cykl!"<<endl;
+			return;
+		}
+	}
+
+	cout << "Tablica d[i]: " << endl;
+
+	for (int i = 0; i < V; i++) //wypisywanie d[i]
+	{
+		cout << d[i] << " ";
+	}
+
+	cout << endl << "Tablica p[i]: " << endl;
+
+	for (int i = 0; i < V; i++) //wypisywanie p[i]
+	{
+		cout << p[i] << " ";
+	}
+
+	cout << endl;
+	delete[] p;
+	delete[] d;
 }
 
 void Graf::prim()
@@ -97,12 +157,20 @@ void Graf::loadFromFile(string Filename)
 	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 
 	int start, end, cost;
+	krawedzie = new Edge[E];
 
-	while (!Plik.eof())
+	for (int i=0; !Plik.eof(); i++)
 	{
 		Plik >> start; Plik >> end; Plik >> cost;
+
+		if (Plik.eof())
+			break;
+
 		macierzWag[start][end] = cost;
-		macierzWag[end][start] = cost;
+
+		krawedzie[i].src = start;
+		krawedzie[i].dst = end;
+		krawedzie[i].cst = cost;
 	}
 }
 
@@ -123,6 +191,8 @@ void Graf::generateGraf()
 
 void Graf::display()
 {
+	cout<<"Macierz wag:"<<endl;
+
 	for (int i = 0; i < V; i++) //reprezentacja macierzowa
 	{
 		for (int j = 0; j < V; j++)
@@ -130,6 +200,13 @@ void Graf::display()
 			cout << macierzWag[i][j]; cout << " ";
 		}
 		cout << endl;
+	}
+
+	cout<<"Krawedzie:"<<endl;
+
+	for (int i=0; i < E; i++)
+	{
+		cout<<krawedzie[i].src<<" -> "<<krawedzie[i].dst<<" = "<<krawedzie[i].cst<<endl;
 	}
 }
 

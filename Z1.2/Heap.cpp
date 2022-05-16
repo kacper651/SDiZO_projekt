@@ -8,7 +8,7 @@ Heap::Heap(int size)
 	init(size);
 }
 
-void Heap::insert(int value)
+void Heap::insert(int* value)
 {
 	if (isFull())
 	{
@@ -22,8 +22,7 @@ void Heap::insert(int value)
 
 void Heap::resize(int newSize)
 {
-	int* tmp_arr = new int[newSize];
-
+	int** tmp_arr = new int*[newSize];
 
 	for (int i=0; this->len > i; i++)
 	{
@@ -41,7 +40,7 @@ void Heap::swapElements(int index1, int index2)
 	if (index1 == index2)
 		return;
 
-	int tmp = arr[index1];
+	int* tmp = arr[index1];
 	arr[index1] = arr[index2];
 	arr[index2] = tmp;
 }
@@ -50,7 +49,7 @@ void Heap::minHeapifyUp(int index)
 {
 	int parentIndex = getParent(index);
 
-	while(isValidIndex(parentIndex) && arr[index] < arr[parentIndex])
+	while(isValidIndex(parentIndex) && *(arr[index]) < *(arr[parentIndex]))
 	{
 		swapElements(index, parentIndex);
 		index = parentIndex;
@@ -70,12 +69,12 @@ void Heap::minHeapifyDown(int parentIndex)
 
 		rightChildIndex = getRightChild(parentIndex);
 
-		if (isValidIndex(rightChildIndex) && arr[rightChildIndex] < arr[leftChildIndex])
+		if (isValidIndex(rightChildIndex) && *(arr[rightChildIndex]) < *(arr[leftChildIndex]))
 		{
 			smallerValueIndex = rightChildIndex;
 		}
 
-		if (arr[smallerValueIndex] < arr[parentIndex])
+		if (*(arr[smallerValueIndex]) < *(arr[parentIndex]))
 		{
 			swapElements(smallerValueIndex, parentIndex);
 			parentIndex = smallerValueIndex;
@@ -115,12 +114,13 @@ bool Heap::isValidIndex(int index)
 
 void Heap::display()
 {
+	cout<<"---DISPLAY---"<<endl;
 	for (int i=0; len>i; i++)
 	{
-		cout<<arr[i]<<" ";
+		cout<<i<<". "<<arr[i]<<"\nval: "<<*(arr[i])<<endl;
 	}
 
-	cout<<endl;
+	cout<<endl<<endl;
 }
 
 //void Heap::loadFromFile(string FileName)
@@ -168,7 +168,7 @@ void Heap::destroyHeap()
 
 void Heap::init(int size)
 {
-	this->arr = new int[size];
+	this->arr = new int*[size];
 	this->size = size;
 	this->len = 0;
 }
@@ -189,17 +189,17 @@ Heap::~Heap()
 //	}
 //}
 
-bool Heap::isEmpty()
-{
-	return false;
-}
+//bool Heap::isEmpty()
+//{
+//	return false;
+//}
 
 int Heap::getLength()
 {
 	return this->len;
 }
 
-int Heap::getTop()
+int* Heap::getTop()
 {
 	return arr[0];
 }
@@ -209,21 +209,21 @@ void Heap::clear()
 	this->len = 0;
 }
 
-int Heap::getElement(int index)
-{
-	if(isValidIndex(index))
-		return this->arr[index];
-	
-	return -1;
-}
+//int* Heap::getElement(int index)
+//{
+//	if(isValidIndex(index))
+//		return this->arr[index];
+//
+//	return nullptr;
+//}
 
-void Heap::setElement(int index, int newValue)
-{
-	if (isValidIndex(index))
-		arr[index] = newValue;
-}
+//void Heap::setElement(int index, int* newValue)
+//{
+//	if (isValidIndex(index))
+//		arr[index] = newValue;
+//}
 
-bool Heap::isValueInHeap(int value)
+bool Heap::isValueInHeap(int* value)
 {
 	for (int i=0; len>i; i++)
 	{

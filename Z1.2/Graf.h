@@ -2,6 +2,7 @@
 
 #include <string>
 #include "List.h"
+#include "Edge.h"
 
 using namespace std;
 
@@ -10,9 +11,10 @@ class Graf
 private:
 	int V; //ilosc wierzcholkow
 	int E; //ilosc krawedzi
-	int arg;
+	int arg; //argument opisujacy czy wierzcholek startowy, uzywany w tablicy d[i]
 
 	int** macierzWag = nullptr; //macierz wag
+	Edge* krawedzie = nullptr; //krawędzie
 
 public:
 	Graf();

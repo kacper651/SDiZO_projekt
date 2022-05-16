@@ -7,7 +7,7 @@ using namespace std;
 class Heap
 {
 	private:
-		int* arr;
+		int** arr;
 		int size;
 		int len;
 
@@ -31,21 +31,21 @@ class Heap
 		Heap(int size);
 		~Heap();
 
-		void insert(int value);
+		void insert(int* value);
 		void deleteElement(int index);
-		bool isValueInHeap(int value);
+		bool isValueInHeap(int* value);
 
 		void display();
 
-		void loadFromFile(string FileName);
-		void generateHeap(int size);
+		//void loadFromFile(string FileName);
+		//void generateHeap(int size);
 
-		bool isEmpty();
+		//bool isEmpty();
 		int getLength();
-		int getTop();
+		int* getTop();
 
 		void clear();
 
-		int getElement(int index);
-		void setElement(int index, int newValue);
+		//int* getElement(int index);
+		//void setElement(int index, int* newValue);
 };

@@ -200,10 +200,10 @@ void menu_heap()
 		case '4': //tutaj znajdowanie elemetu w kopcu
 			cout << "Podaj wartosc, ktora chcesz znalezc:";
 			cin >> value;
-			if (myHeap.isValueInHeap(value))
-				cout << "podana wartosc jest w kopcu";
-			else
-				cout << "podanej wartoœci NIE ma w kopcu";
+//			if (myHeap.isValueInHeap(value))
+//				cout << "podana wartosc jest w kopcu";
+//			else
+//				cout << "podanej wartoœci NIE ma w kopcu";
 			break;
 
 		case '5':  //tutaj generowanie kopca
@@ -390,14 +390,7 @@ void menuZ2()
 
 int main(int argc, char* argv[])
 {
-	srand(time(NULL));
-
-	//menuZ2();
-	Graf graf;
-
-	graf.loadFromFile("dane_droga_sk2.txt");
-	//graf.display();
-	graf.dijkstra();
+	menuZ2();
 
 	return 0;
 }
