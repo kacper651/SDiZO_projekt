@@ -7,30 +7,24 @@
 
 using namespace std;
 
-List::List()
-{
-	head = nullptr;
-	tail = nullptr;
-}
-
-void List::AddFront(int value)
+template<typename T>
+void List<T>::AddFront(T value)
 {
 	this->insert(0, value);
 }
 
-void List::AddBack(int value)
-{
-	this->insert((this->size()-1), value);
-}
 
-void List::AddRandom(int value)
+
+template<typename T>
+void List<T>::AddRandom(T value)
 {
 	int index = rand() % this->size();
 
 	this->insert(index, value);
 }
 
-void List::AddAtPosition(int value, int index)
+template<typename T>
+void List<T>::AddAtPosition(T value, int index)
 {
 	if(index < (size()))
 		ElemList* elem = this->insert(index, value);
@@ -40,57 +34,8 @@ void List::AddAtPosition(int value, int index)
 		AddBack(value);
 }
 
-ElemList* List::insert(int index, int value)
-{
-	ElemList* new_elem = new ElemList(value);
-
-	if (index == (this->size()-1) && tail != nullptr)
-	{
-		tail->setNext(new_elem);
-		new_elem->setPrev(tail);
-
-		tail = new_elem;
-		return new_elem;
-	}
-	
-
-	ElemList* elem = getElement(index);
-
-	if (elem != nullptr)
-		elem->insert(new_elem);
-
-	if (new_elem->getPrev() == nullptr)
-		head = new_elem;
-
-	if (new_elem->getNext() == nullptr)
-		tail = new_elem;
-
-	return new_elem;
-}
-
-void List::destroyList()
-{
-	ElemList* elem = head;
-	ElemList* next_elem = nullptr;
-
-	if (elem != nullptr)
-		next_elem = elem->getNext();
-
-	while (elem != nullptr)
-	{
-		delete elem;
-
-		elem = next_elem;
-
-		if (elem != nullptr)
-			next_elem = elem->getNext();
-	}
-
-	head = nullptr;
-	tail = nullptr;
-}
-
-ElemList *List::findValue(int value)
+template<typename T>
+ElemList *List<T>::findValue(T value)
 {
 	ElemList* elem = head;
 
@@ -102,20 +47,8 @@ ElemList *List::findValue(int value)
 	return elem;
 }
 
-ElemList *List::getElement(int index)
-{
-	ElemList* elem = head;
-	
-	while(index > 0 && elem != nullptr)
-	{
-		elem = elem->getNext();
-		index--;
-	}
-
-	return elem;
-}
-
-int List::loadFromFile(string FileName)
+template<typename T>
+int List<T>::loadFromFile(string FileName)
 {
 	destroyList();
 
@@ -139,31 +72,10 @@ int List::loadFromFile(string FileName)
 	return 0;
 }
 
-void List::display()
-{
-	ElemList* elem = head;						
 
-	cout<<"front: ";
 
-	while(elem != nullptr)
-	{
-		cout<<elem->display()<<" ";
-		elem = elem->getNext();
-	}
-
-	cout<<"\nback: ";
-	elem = tail;
-
-	while(elem != nullptr)
-	{
-		cout<<elem->display()<<" ";
-		elem = elem->getPrev();
-	}
-
-	cout<<endl<<endl;
-}
-
-void List::deleteElement(int value)
+template<typename T>
+void List<T>::deleteElement(T value)
 {
 	ElemList* elem = findValue(value);
 
@@ -181,31 +93,11 @@ void List::deleteElement(int value)
 	}
 }
 
-int List::size()
-{
-	ElemList* elem = head;
-	int len = 0;
-
-	while (elem != nullptr)
-	{
-		elem = elem->getNext();
-		len++;
-	}
-
-	return len;
-}
-
-void List::generateList(int size)
+template<typename T>
+void List<T>::generateList(int size)
 {
 	for (int i = 0; i < size; i++)
 	{
 		AddFront(rand() % 100);
 	}
-}
-
-
-
-List::~List()
-{
-	destroyList();
 }

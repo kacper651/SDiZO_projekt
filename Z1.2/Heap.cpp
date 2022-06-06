@@ -3,7 +3,8 @@
 #include <iostream>
 #include <fstream>
 
-Heap::Heap(int size)
+template<typename T>
+Heap<T>::Heap(int size)
 {
 	init(size);
 }
@@ -22,7 +23,7 @@ void Heap::insert(int* value)
 
 void Heap::resize(int newSize)
 {
-	int** tmp_arr = new int*[newSize];
+	T* tmp_arr = new T[newSize];
 
 	for (int i=0; this->len > i; i++)
 	{
@@ -123,29 +124,6 @@ void Heap::display()
 	cout<<endl<<endl;
 }
 
-//void Heap::loadFromFile(string FileName)
-//{
-//	destroyHeap();
-//
-//	ifstream Plik(FileName);
-//	int cnt_size, tmp;
-//
-//	if (!Plik.good())
-//	{
-//		cout << "nie ma pliku\n";
-//		return;
-//	}
-//
-//	Plik >> cnt_size;
-//	init(cnt_size + 10);
-//
-//	for (int i = 0; i < cnt_size; i++)
-//	{
-//		Plik >> tmp;
-//		this->insert(tmp);
-//	}
-//}
-
 void Heap::deleteElement(int index)
 {
 	if (!isValidIndex(index))
@@ -178,17 +156,6 @@ Heap::~Heap()
 	destroyHeap();
 }
 
-//void Heap::generateHeap(int size)
-//{
-//	destroyHeap();
-//	init(size);
-//
-//	for (int i=0; size>i; i++)
-//	{
-//		insert(rand() % 100);
-//	}
-//}
-
 int Heap::getLength()
 {
 	return this->len;
@@ -203,20 +170,6 @@ void Heap::clear()
 {
 	this->len = 0;
 }
-
-//int* Heap::getElement(int index)
-//{
-//	if(isValidIndex(index))
-//		return this->arr[index];
-//
-//	return nullptr;
-//}
-
-//void Heap::setElement(int index, int* newValue)
-//{
-//	if (isValidIndex(index))
-//		arr[index] = newValue;
-//}
 
 bool Heap::isValueInHeap(int* value)
 {

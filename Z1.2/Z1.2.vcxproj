@@ -19,6 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="data.txt" />
+    <Text Include="heap1.txt" />
+    <Text Include="heap2.txt" />
+    <Text Include="tab1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Edge.cpp" />
+    <ClCompile Include="ElemList.cpp" />
+    <ClCompile Include="Graf.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Table.cpp" />
+    <ClCompile Include="Vertex.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Edge.h" />
     <ClInclude Include="ElemList.h" />
     <ClInclude Include="Graf.h" />
@@ -26,21 +40,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="Tests.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Edge.cpp" />
-    <ClCompile Include="ElemList.cpp" />
-    <ClCompile Include="Graf.cpp" />
-    <ClCompile Include="Heap.cpp" />
-    <ClCompile Include="List.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Table.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="data.txt" />
-    <Text Include="heap1.txt" />
-    <Text Include="heap2.txt" />
-    <Text Include="tab1.txt" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
