@@ -1,3 +1,7 @@
+// menu.cpp : Defines the entry point for the console application.
+//
+
+
 #include<conio.h>
 #include<string>
 #include<iostream>
@@ -7,6 +11,7 @@
 #include "Heap.h"
 #include "Graf.h"
 #include "Vertex.h"
+#include "Tests.h"
 
 using namespace std;
 
@@ -15,6 +20,8 @@ void menuShortestPath()
 	char opt;
 	Graf myGraf;
 	string filename;
+	int v;
+	float den;
 
 	do
 	{
@@ -40,7 +47,11 @@ void menuShortestPath()
 			break;
 
 		case '2':
-			myGraf.generateGraf();
+			cout << "Podaj V: " << endl;
+			cin >> v;
+			cout << "Podaj gestosc: " << endl;
+			cin >> den;
+			myGraf.generateGraf(v, den, true);
 			myGraf.display();
 			break;
 
@@ -51,11 +62,13 @@ void menuShortestPath()
 		case '4':
 			myGraf.display();
 			myGraf.dijkstraMatrix();
+			myGraf.dijkstraList();
 			break;
 
 		case '5':
 			myGraf.display();
-				myGraf.bellmanFordMatrix();
+			myGraf.bellmanFordMatrix();
+			myGraf.bellmanFordList();
 			break;
 		}
 
@@ -67,6 +80,8 @@ void menuMST()
 	char opt;
 	Graf myGraf;
 	string filename;
+	int v;
+	float den;
 
 	do
 	{
@@ -85,12 +100,18 @@ void menuMST()
 		switch (opt)
 		{
 		case '1':
+			cout << "Podaj nazwe pliku: ";
+			cin >> filename;
 			myGraf.loadFromFile(filename, true);
 			myGraf.display();
 			break;
 
 		case '2':
-			myGraf.generateGraf();
+			cout << "Podaj V: " << endl;
+			cin >> v;
+			cout << "Podaj gestosc: " << endl;
+			cin >> den;			
+			myGraf.generateGraf(v, den, false);
 			myGraf.display();
 			break;
 
@@ -101,10 +122,12 @@ void menuMST()
 		case '4':
 			myGraf.display();
 			myGraf.primMatrix();
+			myGraf.primList();
 			break;
 
 		case '5':
 			myGraf.display();
+			myGraf.kruskalMatrix();
 			myGraf.kruskalList();
 			break;
 		}
@@ -142,25 +165,31 @@ void menuZ2()
 
 int main(int argc, char* argv[])
 {
-	//menuZ2();
+	srand(time(NULL));
+	menuZ2();
 
-	Graf g;
+	//Graf g;
 
-	g.loadFromFile("dane_mst1.txt", true);
+	//g.generateGraf(5, 20, false);
+	//g.display();
+
+	//g.loadFromFile("dane_droga_sk_BF.txt", false);
 	//g.dijkstraMatrix();
 	//g.dijkstraList();
+
+	//g.primList();
 	//g.primMatrix();
 
-	g.dijkstraList();
-	g.dijkstraMatrix();
+	//g.bellmanFordList();
+	//g.bellmanFordMatrix();
 
-	/*Graf graf;
+	//g.kruskalList();
+	//g.kruskalMatrix();
 
-	graf.loadFromFile("dane_droga_sk1.txt");
-	graf.display();
-	graf.dijkstraMatrix();
-	cout << endl;
-	graf.bellmanFordMatrix();*/
+	//graphTestDijkstra();
+	//graphTestBellmanFord();
+	//graphTestPrim();
+	//graphTestKruskal();
 
 	return 0;
 }

@@ -89,6 +89,57 @@ void Graf::dijkstraMatrix()
 		cout << "Przed proba wykonania algorytmu wczytaj graf!" << endl;
 }
 
+void Graf::bellmanFordList()
+{
+	bool updated;
+	List<EdgeClass*> edges;
+
+	wierzcholki[arg].setDistanceFromStart(0);
+
+	//ładowanie wszystskich krawędzi
+	for (int i=0; wierzcholki.size()>i; i++)
+	{
+		for (int j=0; wierzcholki[i].getNeighboursList().size()>j; j++)
+		{
+			edges.AddBack(&(wierzcholki[i].getNeighboursList()[j]));
+		}
+	}
+
+	for (int i = 0; i < V - 1; i++)
+	{
+		updated = false;
+
+		for (int j = 0; j < E; j++)
+		{
+			if (edges[j]->get_src()->getDistanceFromStart() != INT_MAX && edges[j]->get_src()->getDistanceFromStart() + edges[j]->get_weight() < edges[j]->get_dst()->getDistanceFromStart())
+			{
+				edges[j]->get_dst()->setDistanceFromStart(edges[j]->get_src()->getDistanceFromStart() + edges[j]->get_weight());
+				edges[j]->get_dst()->setParent(edges[j]->get_src());
+				updated = true;
+			}
+		}
+
+		if (updated == false) //sprawdzenie czy jest sens dalej iterowac
+			break;
+	}
+
+	for (int i = 0; i < E && updated; i++) //petla sprawdzajaca czy wystepuje ujemny cykl w grafie
+	{
+		if (edges[i]->get_src()->getDistanceFromStart() != INT_MAX && edges[i]->get_src()->getDistanceFromStart() + edges[i]->get_weight() < edges[i]->get_dst()->getDistanceFromStart())
+		{
+			cout << "Ujemny cykl!" << endl;
+			return;
+		}
+	}
+
+	for (int i=0; V>i; i++)
+	{
+		cout<<"Vertex: "<<i<<endl;
+		cout<<"Distance from start: "<<wierzcholki[i].getDistanceFromStart()<<endl;
+		cout<<"Parent: "<<findIndex(wierzcholki[i].getParent())<<endl<<endl;
+	}
+}
+
 void Graf::bellmanFordMatrix()
 {
 	if (macierzWag != nullptr)
@@ -201,20 +252,86 @@ void Graf::dijkstraList()
 
 	for (int i=0; V>i; i++)
 	{
-		cout<<i<<": "<<&(wierzcholki[i])<<endl;
+		cout<<"Vertex: "<<i<<endl;
+		cout<<"Distance from start: "<<wierzcholki[i].getDistanceFromStart()<<endl;
+		cout<<"Parent: "<<findIndex(wierzcholki[i].getParent())<<endl<<endl;
 	}
+}
+
+void Graf::primList()
+{
+	Heap<Vertex*> heapQueue(V);
+	bool* mstSet = new bool[V];
+
+	//kluczem jest dystans od startowego wierzchołka
+	wierzcholki[arg].setDistanceFromStart(0);
+
+	for (int i=0; V>i; i++)
+	{
+		heapQueue.insert(&(wierzcholki[i]));
+		mstSet[i] = false;
+	}
+
+	Vertex* currentVertex;
+	EdgeClass* currentEdgeStruct;
+
+	while(heapQueue.getLength() > 0)
+	{
+		currentVertex = heapQueue.getTop();
+
+		mstSet[findIndex(currentVertex)] = true;
+
+		//cout<<"Current: "<<findIndex(currentVertex)<<endl;
+
+		/*for (int i=0; V>i; i++)
+		{
+			cout<<i<<" ";
+		}
+		cout<<endl;*/
+
+		/*for (int i=0; V>i; i++)
+		{
+			cout<<wierzcholki[i].getDistanceFromStart()<<" ";
+		}
+
+		cout<<endl;*/
+
+		/*for (int i=0; V>i; i++)
+		{
+			cout<<findIndex(wierzcholki[i].getParent())<<" ";
+		}
+
+		cout<<endl<<endl;*/
+
+		for (int i=0; currentVertex->getNeighboursList().size() > i; i++)
+		{
+			currentEdgeStruct = &currentVertex->getNeighboursList()[i];
+
+			//cout<<"Checking vertex: "<<findIndex(currentEdgeStruct->get_dst())<<endl;
+
+			if (mstSet[findIndex(currentEdgeStruct->get_dst())] == false &&
+				currentEdgeStruct->get_weight() < currentEdgeStruct->get_dst()->getDistanceFromStart()) //relaksacja
+			{
+				currentEdgeStruct->get_dst()->setDistanceFromStart(currentEdgeStruct->get_weight());
+				currentEdgeStruct->get_dst()->setParent(currentVertex);
+			}
+		}
+
+		heapQueue.deleteElement(0);
+	}
+
+	int sum = 0;
 
 	for (int i=0; V>i; i++)
 	{
 		cout<<"Vertex: "<<i<<endl;
 		cout<<"Distance from start: "<<wierzcholki[i].getDistanceFromStart()<<endl;
-		cout << "Parent: " << wierzcholki[i].getParent()<< endl << endl;
+		cout<<"Parent: "<<findIndex(wierzcholki[i].getParent())<<endl<<endl;
+
+		sum += wierzcholki[i].getDistanceFromStart();
 	}
-}
 
-void Graf::bellmanFordList()
-{
-
+	cout<<"Suma MST: "<<sum<<endl;
 }
 
 void Graf::primMatrix()
@@ -287,17 +404,20 @@ void Graf::primMatrix()
 	delete[] key;
 }
 
-void Graf::primList()
-{
-
-}
-
 Vertex *Graf::findSet(Vertex *v)
 {
 	if (v->getParent() != v)
 		v->setParent(findSet(v->getParent()));
 
 	return v->getParent();
+}
+
+int Graf::findSet(int w, int *parent)
+{
+	if (parent[w] != w)
+		parent[w] = findSet(parent[w], parent);
+
+	return parent[w];
 }
 
 void Graf::unionSet(Vertex *v_1, Vertex *v_2)
@@ -307,21 +427,68 @@ void Graf::unionSet(Vertex *v_1, Vertex *v_2)
 
 	if (a->getRank() < b->getRank())
 	{
-		a->setParent(b);
+		for (int i=0; wierzcholki.size()>i; i++)
+		{
+			if (wierzcholki[i].getParent() == a)
+			{
+				wierzcholki[i].setParent(b);
+			}
+		}
+
+		b->setRank(b->getRank() + 1);
 	}
 	else
 	{
-		b->setParent(a);
-	}
+		for (int i=0; wierzcholki.size()>i; i++)
+		{
+			if (wierzcholki[i].getParent() == b)
+			{
+				wierzcholki[i].setParent(a);
+			}
+		}
 
-	if (a->getRank() == b->getRank())
-	{
 		a->setRank(a->getRank() + 1);
+	}
+}
+
+void Graf::unionSet(int w_1, int w_2, int* parent, int* rank)
+{
+	int a = findSet(w_1, parent);
+	int b = findSet(w_2, parent);
+
+	if (rank[a] < rank[b])
+	{
+		for (int i=0; V>i; i++)
+		{
+			if (parent[i] == a)
+			{
+				parent[i] = b;
+			}
+		}
+
+		rank[b] += 1;
+	}
+	else
+	{
+		for (int i=0; V>i; i++)
+		{
+			if (parent[i] == b)
+			{
+				parent[i] = a;
+			}
+		}
+
+		rank[a] += 1;
 	}
 }
 
 void Graf::kruskalList()
 {
+	if (rank != nullptr)
+	{
+		delete rank;
+	}
+
 	rank = new int[V];
 	Heap<EdgeClass*> edges(E);
 	List<EdgeClass*> mst;
@@ -358,17 +525,69 @@ void Graf::kruskalList()
 		edges.deleteElement(0);
 	}
 
-	for (int i=0; wierzcholki.size()>i; i++)
+	int sum = 0;
+
+	for (int i=0; mst.size()>i; i++)
 	{
-		cout<<i<<". "<<&wierzcholki[i]<<endl;
+		cout<<findIndex(mst[i]->get_src())<<" -> "<<findIndex(mst[i]->get_dst())<<": "<<mst[i]->get_weight()<<endl;
+		sum += mst[i]->get_weight();
+	}
+
+	cout<<"Suma MST: "<<sum<<endl;
+}
+
+void Graf::kruskalMatrix()
+{
+	if (rank != nullptr)
+	{
+		delete rank;
+	}
+
+	rank = new int[V];
+	List<Edge*> mst;
+	Heap<Edge*> edges(E);
+
+	int* d = new int[V];
+	int* p = new int[V];
+
+	//dodanie wszystkich krawędzi do kopca
+	for (int i=0; i<E; i++)
+	{
+		edges.insert(&(krawedzie[i]));
+	}
+
+	//ustawienie początkowe wartości
+	for (int i=0; i<V; i++)
+	{
+		d[i] = INT_MAX;
+		p[i] = i;
+		rank[i] = 0;
+	}
+
+	//obecnie sprawdzane wierzchołki
+	int w_1;
+	int w_2;
+
+	while(!edges.isEmpty())
+	{
+		w_1 = edges.getTop()->src;
+		w_2 = edges.getTop()->dst;
+
+		if (p[w_1] != p[w_2])
+		{
+			mst.AddBack(edges.getTop());
+			this->unionSet(w_1, w_2, p, rank);
+		}
+
+		edges.deleteElement(0);
 	}
 
 	int sum = 0;
 
 	for (int i=0; mst.size()>i; i++)
 	{
-		cout<<mst[i]->get_src()<<" -> "<<mst[i]->get_dst()<<": "<<mst[i]->get_weight()<<endl;
-		sum += mst[i]->get_weight();
+		cout<<mst[i]->src<<" -> "<<mst[i]->dst<<": "<<mst[i]->cst<<endl;
+		sum += mst[i]->cst;
 	}
 
 	cout<<"Suma MST: "<<sum<<endl;
@@ -394,12 +613,6 @@ void Graf::loadFromFile(string Filename, bool mst)
 	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 
 	int start, end, cost;
-	krawedzie = new Edge[E];
-
-	for (int i=0; V>i; i++)
-	{
-		wierzcholki.AddBack(Vertex());
-	}
 
 	for (int i=0; !Plik.eof(); i++)
 	{
@@ -409,33 +622,106 @@ void Graf::loadFromFile(string Filename, bool mst)
 			break;
 
 		macierzWag[start][end] = cost;
+		wierzcholki[start].addNeighbour(&wierzcholki[start], &wierzcholki[end], cost);
 
 		if (mst)
+		{
 			macierzWag[end][start] = cost;
+			wierzcholki[end].addNeighbour(&wierzcholki[end], &wierzcholki[start], cost);
+		}
 
 		krawedzie[i].src = start;
 		krawedzie[i].dst = end;
 		krawedzie[i].cst = cost;
-
-		//reprezentacja listowa
-		wierzcholki[start].addNeighbour(&wierzcholki[start], &wierzcholki[end], cost);
-		wierzcholki[start].setVertexNumber(start);
 	}
 }
 
-void Graf::generateGraf()
+//den: 0-100 (%)
+void Graf::generateGraf(int v, float den, bool directed)
 {
-	cout << "Podaj ilosc wierzcholkow grafu: ";
-	cin >> V;
-	cout << "Podaj gestosc zapelnienia grafu w %: ";
-	float density;
-	cin >> density;
-	density /= 100;
-	E = density * V * (V - 1) / 2; //ilosc wierzcholkow ze wzoru w oparciu na gestosc grafu
+	this->arg = 0;
+	this->V = v;
+
+	den /= 100;
+	int maxE = V * (V - 1); //ilosc wierzcholkow ze wzoru w oparciu na gestosc grafu
+
+	if (!directed)
+		maxE /= 2;
+
+	E = floor(den * maxE);
 
 	this->init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 
-	int cost, V1, V2;
+	int V1, V2, cost;
+
+	bool* mark = new bool[V];
+
+	for (int i=0; V>i; i++)
+	{
+		mark[i] = false;
+	}
+
+	bool all_visited = false;
+
+	for (int i=0; E>i; i++)
+	{
+		//sprawdzanie czy wszystkie wierzchołki mają już połączenie
+		all_visited = true;
+
+		for (int i=0; V>i; i++)
+		{
+			if (mark[i] == false)
+			{
+				all_visited = false;
+				break;
+			}
+		}
+
+		if (all_visited)
+		{
+			for (int i=0; V>i; i++)
+			{
+				mark[i] = false;
+			}
+		}
+
+		do
+		{
+			V1 = rand() % V;
+
+			while((V2 = rand() % V) == V1)
+			{
+
+			}
+		}while(macierzWag[V1][V2] != 0 || mark[V1] != false);
+
+		cost = rand() % 9 + 1;
+		macierzWag[V1][V2] = cost;
+		wierzcholki[V1].addNeighbour(&wierzcholki[V1], &wierzcholki[V2], cost);
+
+		if (!directed)
+		{
+			macierzWag[V2][V1] = cost;
+		}
+
+		mark[V1] = true;
+	}
+
+	int counter = 0;
+
+	for (int i=1; V>i; i++)
+	{
+		for (int j=0; i>j; j++)
+		{
+			if (macierzWag[i][j] != 0)
+			{
+				krawedzie[counter].src = i;
+				krawedzie[counter].dst = j;
+				krawedzie[counter].cst = macierzWag[i][j];
+				counter++;
+			}
+		}
+	}
 }
 
 void Graf::display()
@@ -485,4 +771,29 @@ void Graf::init()
 			macierzWag[i][j] = 0;
 		}
 	}
+
+	//tworzenie tabeli krawędzi
+	if (krawedzie != nullptr)
+	{
+		delete[] krawedzie;
+		krawedzie = nullptr;
+	}
+
+	krawedzie = new Edge[E];
+
+	for (int i=0; V>i; i++)
+	{
+		wierzcholki.AddBack(Vertex());
+	}
+}
+
+int Graf::findIndex(Vertex *elem)
+{
+	for (int i=0; wierzcholki.size() > i; i++)
+	{
+		if (&(wierzcholki[i]) == elem)
+			return i;
+	}
+
+	return -1;
 }

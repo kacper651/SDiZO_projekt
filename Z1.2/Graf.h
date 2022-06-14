@@ -21,73 +21,32 @@ private:
 	//dla kruskala
 	int* rank;
 	Vertex* findSet(Vertex* v);
+	int findSet(int w, int* parent);
 	void unionSet(Vertex* v_1, Vertex* v_2);
+	void unionSet(int w_1, int w_2, int* parent, int* rank);
 
 public:
 	Graf();
 	~Graf();
 
-	//sciezka macierzowo
-	void dijkstraMatrix();
+	void bellmanFordList();
 	void bellmanFordMatrix();
 
-	//sciezka listowo
 	void dijkstraList();
-	/*
-	int* d = new int[V]; //inicjalizacja tablic wynikowych algorytmu
-		int* p = new int[V];
+	void dijkstraMatrix();
 
-		for (int i = 0; i < V; i++) //wypelnienie tablic poczatkowymi wartosciami
-		{
-			d[i] = INT_MAX;
-			p[i] = -1;
-		}
-
-		bool updated; //flaga sprawdzajaca czy nastapila relaksacja
-
-		d[arg] = 0;//wierzcholek startowy
-
-		for (int i = 0; i < V - 1; i++) //iteracja po wszystkich mozliwych sasiadach
-		{
-			updated = false;
-
-			for (int j = 0; j < E; j++) //E = liczba krawedzi
-			{
-				if (d[krawedzie[j].src] != INT_MAX && d[krawedzie[j].src] + krawedzie[j].cst < d[krawedzie[j].dst]) //relaksacja
-				{
-					d[krawedzie[j].dst] = d[krawedzie[j].src] + krawedzie[j].cst;
-					p[krawedzie[j].dst] = krawedzie[j].src;
-					updated = true;
-				}
-			}
-
-			if (updated == false) //sprawdzenie czy jest sens dalej iterowac
-				break;
-		}
-
-		for (int i = 0; i < E && updated; i++) //petla sprawdzajaca czy wystepuje ujemny cykl w grafie
-		{
-			if (d[krawedzie[i].src] != INT_MAX && d[krawedzie[i].src] + krawedzie[i].cst < d[krawedzie[i].dst])
-			{
-				cout << "Ujemny cykl!" << endl;
-				return;
-			}
-		}*/
-	void bellmanFordList();
-
-	//mst macierzowo
+	void primList();
 	void primMatrix();
 
-	//mst listowo
-	void primList();
 	void kruskalList();
+	void kruskalMatrix();
 
-
-	//utility
 	void loadFromFile(string Filename, bool mst = false);
-	void generateGraf();
+	void generateGraf(int v, float den, bool directed);
 
 	void display();
+
+	int findIndex(Vertex* elem);
 
 	void init(); //usuniecie istniejacej macierzy i wypelnienie nowej zerami wedlug ilosci wcztanych wyzej wierzcholkow
 };

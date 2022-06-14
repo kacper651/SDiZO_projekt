@@ -45,4 +45,11 @@ class Edge
 		int src;
 		int dst;
 		int cst;
+
+		bool operator<(const Edge& other) const
+		{
+			return this->cst < other.cst;
+		}
 };
+
+

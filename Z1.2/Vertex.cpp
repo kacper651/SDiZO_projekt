@@ -2,10 +2,11 @@
 
 Vertex::Vertex()
 {
-	parent = nullptr;
-	distanceFromStart = INT_MAX;
-	rank = 0;
-	this->vertexNumber = vertexNumber;
+	this->parent = nullptr;
+	this->distanceFromStart = INT_MAX;
+	this->rank = 0;
+	//this->init();
+	//this->vertexNumber = vertexNumber;
 }
 
 void Vertex::addNeighbour(Vertex* start_vertex, Vertex* end_vertex, int distance)
@@ -22,7 +23,6 @@ void Vertex::setDistanceFromStart(int newDistance)
 {
 	this->distanceFromStart = newDistance;
 }
-
 
 Vertex *Vertex::getParent()
 {
@@ -47,11 +47,6 @@ List<EdgeClass> &Vertex::getNeighboursList()
 int Vertex::getVertexNumber()
 {
 	return this->vertexNumber;
-}
-
-void Vertex::setVertexNumber(int newNumber)
-{
-	this->vertexNumber = newNumber;
 }
 
 int Vertex::getRank() const {

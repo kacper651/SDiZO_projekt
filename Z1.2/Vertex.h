@@ -24,14 +24,12 @@ class Vertex
 		//settery
 		void setParent(Vertex* newParent);
 		void setDistanceFromStart(int newDistance);
-		void setVertexNumber(int newNumber);
 
 		//gettery
 		Vertex* getParent();
 		int getDistanceFromStart();
 		List<EdgeClass>& getNeighboursList();
 		int getVertexNumber();
-
 
 		//przeciążanie operatorów
 		bool operator<(const Vertex& r);
@@ -40,6 +38,13 @@ class Vertex
 		{
 			out << vertex.distanceFromStart;
 			return out;
+		}
+
+		void init()
+		{
+			this->parent = nullptr;
+			this->distanceFromStart = INT_MAX;
+			this->rank = 0;
 		}
 
 	private:
